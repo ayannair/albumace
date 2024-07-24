@@ -9,7 +9,7 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-YOUTUBE_API_KEY = 'AIzaSyD51Le8K5o-gwgQFWdiKJpQdrKFh-jU9sI'
+YOUTUBE_API_KEY = 'API_KEY'
 FFMPEG_PATH = '/opt/homebrew/bin/ffmpeg'
 
 def download_audio(url):
