@@ -66,3 +66,6 @@ Fantanosize is an innovative project designed to analyze album reviews by Anthon
 2. Search for an album review by entering the album name in the search bar.
 3. View the sentiment scores for different aspects of the album.
 4. Explore detailed topics discussed in the lyrics by clicking on individual songs.
+
+
+## Go deeper than the light to decent 7
