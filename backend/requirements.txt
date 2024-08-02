@@ -8,4 +8,4 @@ google-generativeai==0.1.0
 nltk==3.8.1
 transformers==4.32.0
 scipy==1.11.0
-torch==2.0.1
+torch==2.2.0
