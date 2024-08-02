@@ -55,6 +55,9 @@ Fantanosize is an innovative project designed to analyze album reviews by Anthon
       ```env
       YOUTUBE_API_KEY=your_youtube_api_key
       GENIUS_API_KEY=your_genius_api_key
+      GEMINI_API_KEYS = [
+          your_gemini_api_keys
+      ]
       ```
 
 ## Usage
