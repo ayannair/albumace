@@ -17,7 +17,7 @@ Fantanosize is an innovative project designed to analyze album reviews by Anthon
 - **Backend**: Flask, Python
 - **Database**: MongoDB (next step)
 - **NLP Models**: BERT, Google Gemini 1.5 Flash
-- **APIs**: YouTube Data API, Genius API
+- **APIs**: YouTube Data API, Genius API, Google Gemini API
 - **Transcription**: Whisper
 
 ## Installation and Setup
