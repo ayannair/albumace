@@ -68,4 +68,5 @@ Fantanosize is an innovative project designed to analyze album reviews by Anthon
 4. Explore detailed topics discussed in the lyrics by clicking on individual songs.
 
 
-## Go deeper than the light to decent 7
+
+Go deeper than a light to decent 7
