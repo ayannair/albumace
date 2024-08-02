@@ -10,7 +10,7 @@ from lyrics import fetch_album_tracks_and_lyrics, get_song_topic, GENAI_API_KEYS
 app = Flask(__name__)
 CORS(app)
 
-YOUTUBE_API_KEY = 'AIzaSyD51Le8K5o-gwgQFWdiKJpQdrKFh-jU9sI'
+YOUTUBE_API_KEY = 'xx'
 FFMPEG_PATH = '/opt/homebrew/bin/ffmpeg'
 
 def download_audio(url):
