@@ -4,14 +4,12 @@ import requests
 import re
 import google.generativeai as genai
 
-GENIUS_ACCESS_TOKEN = 'ApsNKiqYrC_DzsCren8wK1nA5hj3r9W4LZRelX40t8Vf3YDut_6SuWyb4KLGsnjl'
+GENIUS_ACCESS_TOKEN = 'xx'
 
 GENAI_API_KEYS = [
-    'AIzaSyA4k6mW9mtJofq1QMA5EKmeX_R8oDizQuM',
-    'AIzaSyCgIrQqnPcr26XksODEluyQw2IeLwkE_-M',
-    'AIzaSyBaEo8AcKX44dLwF4zs71Uq1IEJWxwVvI4',
-    'AIzaSyDTEyjvDoOm4Off4OYWbcdNlJ3dzEcq_zI',
-    'AIzaSyBkC5F97b3hh5bSp-StG6oN4r9o6dMloUQ'
+    'a',
+    'b',
+    'c'
 ]
 
 def filter_lyrics(lyrics):
