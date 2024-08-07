@@ -98,7 +98,6 @@ def analyze_text_file(file_path, review_info_fp):
         'concept_score': compute_score(analyze_topic(topic_sentences["concept"])),
     }
 
-    # Calculate the average of the topic scores
     average_score = sum(scores.values()) / len(scores)
 
     # Calculate the review segment score
