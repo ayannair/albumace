@@ -1,4 +1,3 @@
-# db.py
 from pymongo import MongoClient
 
 # Function to get the MongoDB client and database
