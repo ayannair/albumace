@@ -6,8 +6,8 @@ import whisper
 import json
 from analysis import analyze_text_file
 from lyrics import fetch_album_tracks_and_lyrics, get_song_topic, GENAI_API_KEY
-from db import get_db  # Import the function to get the MongoDB client
-from bson import ObjectId  # Import ObjectId
+from db import get_db
+from bson import ObjectId
 
 app = Flask(__name__)
 CORS(app)
@@ -17,17 +17,14 @@ FFMPEG_PATH = '/opt/homebrew/bin/ffmpeg'
 
 # Initialize MongoDB client and collection
 db = get_db()
-collection = db['albums']  # Replace with your collection name
+collection = db['albums']
 
 def cleanup_translations():
     try:
-        # Define the regex pattern to match titles containing " by Genius .... "
         pattern = r'.* by Genius .*'
-        
-        # Find and delete entries matching the pattern
+
         result = collection.delete_many({'title': {'$regex': pattern, '$options': 'i'}})
-        
-        # Print the number of deleted entries
+
         print(f"Deleted {result.deleted_count} entries with translations.")
     except Exception as e:
         print(f"Error during cleanup: {str(e)}")
@@ -73,17 +70,15 @@ def search():
     query = request.args.get('query')
     
     try:
-        # Check if the album is already in the database
         db_result = collection.find_one({'title': {'$regex': query, '$options': 'i'}})
         
         if db_result:
-            # Convert ObjectId to string
             db_result['_id'] = str(db_result['_id'])
             with open('results.json', 'w') as f:
                 json.dump(db_result, f, indent=4)
             return jsonify(db_result)
 
-        # If the album is not found in the database, proceed with the YouTube API call
+        # If the album is not found in the database, use YT API
         search_query = f'{query} TheNeedleDrop review'
 
         params = {
@@ -107,7 +102,7 @@ def search():
             audio = download_audio(youtube_link)
             transcribe_audio(audio)
             
-            review_info_fp = 'review_info.txt'  # Ensure this path is correct for your setup
+            review_info_fp = 'review_info.txt'
             scores = analyze_text_file('transcript.txt', review_info_fp)
 
             lyrics, title = fetch_album_tracks_and_lyrics(query)
@@ -119,7 +114,7 @@ def search():
                 'total_inputs': 1
             }
             
-            # Insert or update the album data in MongoDB
+            # Insert/update the album data in MongoDB
             collection.update_one(
                 {'title': title},
                 {'$set': results},
@@ -147,23 +142,19 @@ def get_topic():
     lyrics_dict_path = 'results.json'
 
     try:
-        # Attempt to fetch the lyrics from the database first
         album_data = collection.find_one({
             'lyrics': {'$elemMatch': {'title': song_title}}
         })
 
         if album_data:
-            # Write the database data to lyrics_dict_path
             with open(lyrics_dict_path, 'w') as f:
                 json.dump(album_data, f, indent=4)
         
         with open(lyrics_dict_path, 'r') as f:
             lyrics_dict = json.load(f)
 
-        # Log available keys for debugging
         print("Available song titles:", [v['title'] for v in lyrics_dict.get('lyrics', {}).values()])
 
-        # Find the song entry based on the title
         song_entry = next((item for key, item in lyrics_dict.get('lyrics', {}).items() if item['title'] == song_title), None)
 
         if song_entry:
@@ -181,7 +172,6 @@ def autocomplete():
     if not query:
         return jsonify([])
 
-    # Perform a case-insensitive search
     results = collection.find({
         'title': {'$regex': query, '$options': 'i'}
     })
