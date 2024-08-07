@@ -39,7 +39,7 @@ def extract_topic_sentences(sentences):
     return topic_sentences
 
 def get_review_segment(transcript):
-    target_phrase = "did you love it"
+    target_phrase = "this album a listen"
     lower_transcript = transcript.lower()
     
     pos = lower_transcript.rfind(target_phrase)
@@ -57,9 +57,6 @@ def get_review_segment(transcript):
     review_segment = ' '.join(sentences[-7:])
     
     return review_segment
-
-
-
 
 def analyze_topic(topic_text):
     encoded_text = tokenizer(topic_text, return_tensors='pt', truncation=True, padding=True, max_length=512)
@@ -92,11 +89,6 @@ def analyze_text_file(file_path, review_info_fp):
     topic_sentences = extract_topic_sentences(sentences)
     review_seg = get_review_segment(text)  # Convert list of sentences back to string
 
-    #overall_score1 = compute_score(analyze_topic(text))
-    overall_score2 = compute_score(analyze_topic(review_seg))
-
-    #score = max(overall_score1, overall_score2)
-    
     scores = {
         'lyrics_score': compute_score(analyze_topic(topic_sentences["lyrics"])),
         'production_score': compute_score(analyze_topic(topic_sentences["production"])),
@@ -104,8 +96,21 @@ def analyze_text_file(file_path, review_info_fp):
         'vocals_score': compute_score(analyze_topic(topic_sentences["vocals"])),
         'originality_score': compute_score(analyze_topic(topic_sentences["originality"])),
         'concept_score': compute_score(analyze_topic(topic_sentences["concept"])),
-        'overall_score': overall_score2
     }
+
+    # Calculate the average of the topic scores
+    average_score = sum(scores.values()) / len(scores)
+
+    # Calculate the review segment score
+    review_segment_score = compute_score(analyze_topic(review_seg))
+
+    # Determine the overall score
+    if abs(review_segment_score - average_score) <= 15:
+        overall_score = review_segment_score
+    else:
+        overall_score = average_score
+
+    scores['overall_score'] = overall_score
 
     with open(review_info_fp, 'w') as f:
         f.write(f"Lyrics segment: {topic_sentences['lyrics']}\n\n")
@@ -116,5 +121,4 @@ def analyze_text_file(file_path, review_info_fp):
         f.write(f"Concept segment: {topic_sentences['concept']}\n\n")
         f.write(f"Review segment: {review_seg}\n\n")
     
-    return topic_sentences, review_seg, scores
-
+    return scores
