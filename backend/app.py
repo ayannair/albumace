@@ -12,7 +12,7 @@ from bson import ObjectId  # Import ObjectId
 app = Flask(__name__)
 CORS(app)
 
-YOUTUBE_API_KEY = 'AIzaSyD51Le8K5o-gwgQFWdiKJpQdrKFh-jU9sI'
+YOUTUBE_API_KEY = 'xx'
 FFMPEG_PATH = '/opt/homebrew/bin/ffmpeg'
 
 # Initialize MongoDB client and collection
