@@ -9,13 +9,13 @@ Fantanosize is an innovative project designed to analyze album reviews by Anthon
 - **Text Processing**: Employs Whisper for transcribing video audio to text.
 - **Topic Modeling**: Analyzes song lyrics using Genius and Gemini API to extract and model topics discussed in the album.
 - **User Interface**: A React-based frontend that displays sentiment scores, topics, and album cover art in an organized and visually appealing manner.
-- **Backend Support**: Flask backend to handle data retrieval, processing, and storage using MongoDB (next step).
+- **Backend Support**: Flask backend to handle data retrieval, processing, and storage using MongoDB.
 
 ## Technologies Used
 
 - **Frontend**: React, CSS
 - **Backend**: Flask, Python
-- **Database**: MongoDB (next step)
+- **Database**: MongoDB
 - **NLP Models**: BERT, Google Gemini 1.5 Flash
 - **APIs**: YouTube Data API, Genius API, Google Gemini API
 - **Transcription**: Whisper
