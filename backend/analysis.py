@@ -3,10 +3,9 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from scipy.special import softmax
 import torch
 
-# Ensure you have downloaded the required NLTK data
 nltk.download('punkt')
 
-# Define keywords for each topic
+# keywords for each topic
 keywords = {
     'lyrics': ['lyrics', 'words', 'writing', 'verses', 'chorus', 'hook', 'lines', 'bars', 'line', 'wordplay'],
     'production': ['beat', 'melody', 'harmony', 'rhythm', 'production', 'sound', 'instrumentation', 'arrangement', 'synths', 'bass', 'drums', 'guitar', 'keys', 'mix', 'mastering', 'sonically'],
@@ -16,7 +15,7 @@ keywords = {
     'concept': ['concept', 'theme', 'cohesion', 'structure', 'production quality', 'is about', 'message', 'substance', 'narrative', 'story'],
 }
 
-# Load the tokenizer and model
+# load tokenizer and model
 MODEL = "cardiffnlp/twitter-roberta-base-sentiment"
 tokenizer = AutoTokenizer.from_pretrained(MODEL)
 model = AutoModelForSequenceClassification.from_pretrained(MODEL)
@@ -45,17 +44,14 @@ def get_review_segment(transcript):
     pos = lower_transcript.rfind(target_phrase)
     
     if pos == -1:
-        # If the target phrase is not found, return the last 10% of the transcript
+        # if target phrase is not found, return last 10% of the transcript
         return transcript[int(len(transcript) * 0.90):]
     
     preceding_text = transcript[:pos]
-    
-    # Extract sentences from the preceding text
     sentences = extract_sentences(preceding_text)
-    
-    # Get the last 5 sentences before the target phrase
+
+    # get last 7 sentences of transcript
     review_segment = ' '.join(sentences[-7:])
-    
     return review_segment
 
 def analyze_topic(topic_text):
@@ -87,7 +83,7 @@ def analyze_text_file(file_path, review_info_fp):
     sentences = extract_sentences(text)
 
     topic_sentences = extract_topic_sentences(sentences)
-    review_seg = get_review_segment(text)  # Convert list of sentences back to string
+    review_seg = get_review_segment(text)
 
     scores = {
         'lyrics_score': compute_score(analyze_topic(topic_sentences["lyrics"])),
@@ -99,11 +95,9 @@ def analyze_text_file(file_path, review_info_fp):
     }
 
     average_score = sum(scores.values()) / len(scores)
-
-    # Calculate the review segment score
     review_segment_score = compute_score(analyze_topic(review_seg))
 
-    # Determine the overall score
+    # check if review segment score is within 15 of average of all topic scores
     if abs(review_segment_score - average_score) <= 15:
         overall_score = review_segment_score
     else:
