@@ -6,28 +6,24 @@ import whisper
 import json
 from analysis import analyze_text_file
 from lyrics import fetch_album_tracks_and_lyrics, get_song_topic, GENAI_API_KEY
-from db import get_db  # Import the function to get the MongoDB client
-from bson import ObjectId  # Import ObjectId
+from db import get_db
+from bson import ObjectId
 
 app = Flask(__name__)
 CORS(app)
 
-YOUTUBE_API_KEY = 'AIzaSyD51Le8K5o-gwgQFWdiKJpQdrKFh-jU9sI'
+YOUTUBE_API_KEY = 'xx'
 FFMPEG_PATH = '/opt/homebrew/bin/ffmpeg'
 
-# Initialize MongoDB client and collection
 db = get_db()
-collection = db['albums']  # Replace with your collection name
+collection = db['albums']
 
 def cleanup_translations():
     try:
-        # Define the regex pattern to match titles containing " by Genius .... "
         pattern = r'.* by Genius .*'
         
-        # Find and delete entries matching the pattern
         result = collection.delete_many({'title': {'$regex': pattern, '$options': 'i'}})
         
-        # Print the number of deleted entries
         print(f"Deleted {result.deleted_count} entries with translations.")
     except Exception as e:
         print(f"Error during cleanup: {str(e)}")
