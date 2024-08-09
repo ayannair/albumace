@@ -5,8 +5,8 @@ import google.generativeai as genai
 import string
 import time
 
-GENIUS_ACCESS_TOKEN = '1CIpfBy4yJZqfQ-GeEGAf2chHIbqnhIrzZ31H5aE25NL89LDDttBgLbHA9yKiutP'
-GENAI_API_KEY = 'AIzaSyA4k6mW9mtJofq1QMA5EKmeX_R8oDizQuM'
+GENIUS_ACCESS_TOKEN = 'xx'
+GENAI_API_KEY = 'xx'
 
 def filter_lyrics(lyrics):
     lines = lyrics.split('\n')
