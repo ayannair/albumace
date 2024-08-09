@@ -12,23 +12,22 @@ from bson import ObjectId
 app = Flask(__name__)
 CORS(app)
 
-YOUTUBE_API_KEY = 'xx'
+YOUTUBE_API_KEY = 'AIzaSyD51Le8K5o-gwgQFWdiKJpQdrKFh-jU9sI'
 FFMPEG_PATH = '/opt/homebrew/bin/ffmpeg'
 
 db = get_db()
 collection = db['albums']
 
+# deletes genius translations
 def cleanup_translations():
     try:
         pattern = r'.* by Genius .*'
-        
         result = collection.delete_many({'title': {'$regex': pattern, '$options': 'i'}})
-        
         print(f"Deleted {result.deleted_count} entries with translations.")
     except Exception as e:
         print(f"Error during cleanup: {str(e)}")
 
-
+# gets audio from youtube
 def download_audio(url):
     try:
         ydl_opts = {
@@ -49,6 +48,7 @@ def download_audio(url):
     except Exception as e:
         raise Exception(f'Error downloading audio: {str(e)}')
 
+# uses openai whisper to transcribe audio
 def transcribe_audio(audio_file):
     try:
         model = whisper.load_model("tiny")
@@ -69,17 +69,16 @@ def search():
     query = request.args.get('query')
     
     try:
-        # Check if the album is already in the database
+        # check if query is in db
         db_result = collection.find_one({'title': {'$regex': query, '$options': 'i'}})
         
         if db_result:
-            # Convert ObjectId to string
             db_result['_id'] = str(db_result['_id'])
             with open('results.json', 'w') as f:
                 json.dump(db_result, f, indent=4)
             return jsonify(db_result)
 
-        # If the album is not found in the database, proceed with the YouTube API call
+        # if not in db, get from youtube
         search_query = f'{query} TheNeedleDrop review'
 
         params = {
@@ -103,8 +102,7 @@ def search():
             audio = download_audio(youtube_link)
             transcribe_audio(audio)
             
-            review_info_fp = 'review_info.txt'  # Ensure this path is correct for your setup
-            scores = analyze_text_file('transcript.txt', review_info_fp)
+            scores = analyze_text_file('transcript.txt')
 
             lyrics, title = fetch_album_tracks_and_lyrics(query)
 
@@ -115,14 +113,13 @@ def search():
                 'total_inputs': 1
             }
             
-            # Insert or update the album data in MongoDB
+            # insert/update db
             collection.update_one(
                 {'title': title},
                 {'$set': results},
                 upsert=True
             )
 
-            # Clean up translations
             cleanup_translations()
 
             with open('results.json', 'w') as f:
@@ -143,23 +140,20 @@ def get_topic():
     lyrics_dict_path = 'results.json'
 
     try:
-        # Attempt to fetch the lyrics from the database first
+        # first find in db
         album_data = collection.find_one({
             'lyrics': {'$elemMatch': {'title': song_title}}
         })
 
         if album_data:
-            # Write the database data to lyrics_dict_path
+            # write to results json file
             with open(lyrics_dict_path, 'w') as f:
                 json.dump(album_data, f, indent=4)
         
         with open(lyrics_dict_path, 'r') as f:
             lyrics_dict = json.load(f)
 
-        # Log available keys for debugging
-        print("Available song titles:", [v['title'] for v in lyrics_dict.get('lyrics', {}).values()])
-
-        # Find the song entry based on the title
+        # find song by title
         song_entry = next((item for key, item in lyrics_dict.get('lyrics', {}).items() if item['title'] == song_title), None)
 
         if song_entry:
@@ -177,7 +171,7 @@ def autocomplete():
     if not query:
         return jsonify([])
 
-    # Perform a case-insensitive search
+    # case insensitive search
     results = collection.find({
         'title': {'$regex': query, '$options': 'i'}
     })
@@ -185,6 +179,8 @@ def autocomplete():
     suggestions = [result['title'] for result in results]
     return jsonify(suggestions)
 
+# updates database from custom album card
+# need to do: total_inputs by user instead of incrementing every time same user edits/save card
 def update_scores_in_database(entry_id, current_scores, input_scores, total_inputs):
     updated_scores = {}
     for key in current_scores:
@@ -205,8 +201,7 @@ def save_scores():
         title = data['title']
         input_scores = data['scores']
 
-        scores_file_path = 'scores.txt'
-
+        # gets album name
         def extract_title_before_by(title):
             return title.split(' by ')[0].strip().lower()
 
@@ -215,6 +210,7 @@ def save_scores():
         last_entry = collection.find().sort('_id', -1).limit(1).next()
         last_entry_album_name = extract_title_before_by(last_entry['title'])
 
+        # check if last entry is the query (applies to searches not in db and were just added)
         if last_entry_album_name == query_album_name:
             updated_scores, updated_total_inputs = update_scores_in_database(
                 last_entry['_id'],
@@ -223,14 +219,11 @@ def save_scores():
                 last_entry.get('total_inputs', 1)
             )
 
-            with open(scores_file_path, 'w') as f:
-                f.write(f"Last Entry Scores (updated): {json.dumps(updated_scores)}\n")
-                f.write(f"Custom Scores: {json.dumps(input_scores)}\n")
-
             print(f"Updated scores for {title} (matches last entry): {input_scores}")
             return jsonify({'message': 'Scores updated successfully (matches last entry)', 'updated_scores': updated_scores})
 
         else:
+            # find in db
             entry = collection.find_one({'title': {'$regex': title, '$options': 'i'}})
             if entry:
                 updated_scores, updated_total_inputs = update_scores_in_database(
@@ -239,10 +232,6 @@ def save_scores():
                     input_scores,
                     entry.get('total_inputs', 1)
                 )
-
-                with open(scores_file_path, 'w') as f:
-                    f.write(f"Existing Entry Scores (updated): {json.dumps(updated_scores)}\n")
-                    f.write(f"Custom Scores: {json.dumps(input_scores)}\n")
 
                 print(f"Updated scores for {title} (found in database): {input_scores}")
                 return jsonify({'message': 'Scores updated successfully (found in database)', 'updated_scores': updated_scores})
