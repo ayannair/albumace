@@ -4,29 +4,26 @@
 /* General container styling */
 .container {
   display: flex;
-  flex-direction: column; /* Stack the title and search bar vertically */
-  justify-content: center; /* Center content horizontally */
-  align-items: center; /* Center content vertically */
-  min-height: 100vh; /* Full viewport height */
-  background-color: #f1ed7f; /* Background color */
-  font-family: "Quicksand", sans-serif; /* Use Quicksand font */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f1ed7f;
+  font-family: "Quicksand", sans-serif;
 }
 
-.content {
+.header {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Header styling */
 h1 {
-  margin: 20px 0; /* Margin around the header */
-  font-family: "Quicksand", sans-serif; /* Apply header font */
+  margin: 20px 0;
   font-size: 2.5rem;
   text-align: center;
 }
 
-/* Search bar styling */
 .search-bar {
   display: flex;
   justify-content: center;
@@ -43,7 +40,7 @@ h1 {
   padding: 8px;
   width: 200px;
   font-size: 16px;
-  font-family: 'Quicksand', sans-serif; /* Use Quicksand font */
+  font-family: "Quicksand", sans-serif;
 }
 
 .search-bar button {
@@ -52,29 +49,26 @@ h1 {
   cursor: pointer;
   border-radius: 20px;
   padding: 8px 16px;
-  background-color: #4CAF50; /* Button background color */
-  color: white; /* Button text color */
-  font-family: 'Quicksand', sans-serif; /* Use Quicksand font */
+  background-color: #4CAF50;
+  color: white;
+  font-family: "Quicksand", sans-serif;
 }
 
-/* Loading icon styling */
 .loading-icon {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 20px; /* Margin to space it from the header */
-  height: 100px; /* Adjust height as needed */
+  margin-top: 20px;
+  height: 100px;
 }
 
-/* Rotating image styling */
 .rotating-image {
-  width: 50px; /* Adjust size as needed */
-  height: 50px; /* Adjust size as needed */
-  animation: rotate 2s linear infinite; /* Apply rotation animation */
+  width: 50px;
+  height: 50px;
+  animation: rotate 2s linear infinite;
 }
 
-/* Rotation keyframes */
 @keyframes rotate {
   from {
     transform: rotate(0deg);
@@ -84,17 +78,14 @@ h1 {
   }
 }
 
-/* Loading text styling */
 .loading-text {
   margin-top: 20px;
   font-size: 1.2rem;
-  font-family: 'Quicksand', sans-serif; /* Use Quicksand font */
-  color: #333; /* Text color */
+  color: #333;
   opacity: 1;
-  animation: fadeInOut 4.5s ease-in-out infinite; /* Fade in and out animation */
+  animation: fadeInOut 4.5s ease-in-out infinite;
 }
 
-/* Fade-in and fade-out keyframes */
 @keyframes fadeInOut {
   0% {
     opacity: 0;
@@ -114,6 +105,19 @@ h1 {
   100% {
     opacity: 0;
   }
+}
+
+/* Bento box layout */
+.bento-box {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin-top: 20px;
+}
+
+.left-section, .right-section {
+  flex: 1;
+  margin: 0 10px;
 }
 
 /* Scores container styling */
@@ -223,17 +227,17 @@ h1 {
   text-align: center; /* Center the text */
 }
 
-/* Lyrics table styling */
 .lyrics-table {
-  width: 100%;
+  width: 90%;
   max-width: 800px;
   margin: 20px 0;
   background-color: #ffffff;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  overflow-x: auto; /* Add horizontal scroll if needed */
+  overflow-x: auto;
   animation: fadeIn 2s forwards;
+  height: 435px;
 }
 
 .lyrics-table h2 {
@@ -262,30 +266,62 @@ h1 {
   background-color: #f1f1f1;
 }
 
-/* Topics section styling */
-.topics-section {
+.scores-section {
+  display: flex;
+  justify-content: space-between;
   width: 100%;
+  margin-top: 3px;
+  margin-bottom: 0px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 48%;
+  margin-top: 100px;
+}
+
+.column .scorebar-container {
+  margin-bottom: 30px;
+}
+
+.overall-score {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 10px 0;
+  width: 100%;
+  text-align: center;
+}
+
+.topics-section {
+  width: 93.8%;
   max-width: 800px;
   margin: 20px 0;
   background-color: #ffffff;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  opacity: 0; /* Start hidden for fade-in effect */
-  animation: fadeIn 2s forwards;
 }
 
-.topics-section h2{
+.topics-section h2 {
   text-align: center;
 }
 
-.topics-section ul{
+.topics-section ul {
   list-style-type: none;
   text-align: center;
   margin-right: 45px;
 }
 
-/* Fade-in animation */
+.fade-in {
+  animation: fadeIn 0.5s forwards;
+}
+
+.fade-out {
+  animation: fadeOut 0.5s forwards;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -295,20 +331,174 @@ h1 {
   }
 }
 
-/* Button styling for "Get Topics" */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 .get-topics-button {
   border: none;
   outline: none;
   cursor: pointer;
   border-radius: 20px;
   padding: 8px 16px;
-  background-color: #4CAF50; /* Button background color */
-  color: white; /* Button text color */
-  font-family: 'Quicksand', sans-serif; /* Use Quicksand font */
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  font-family: "Quicksand", sans-serif;
+  margin-left: 150px; /* Add this line to push the button to the right */
 }
 
-.get-topics-button:hover {
-  background-color: #45a049; /* Darker background color on hover */
+.autocomplete-suggestions {
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  max-height: 150px;
+  overflow-y: auto;
+  position: absolute;
+  background-color: white;
+  z-index: 1000;
+  width: calc(100% - 2px); /* Match the width of the search bar */
+  top: 40px; /* Adjust this value to position it directly below the search bar */
+}
+
+.autocomplete-suggestions li {
+  padding: 8px;
+  cursor: pointer;
+  list-style-type: none;
+}
+
+.autocomplete-suggestions li:hover {
+  background-color: #f0f0f0;
+}
+
+.search-bar {
+  position: relative; /* Ensure the suggestions are positioned relative to the search bar */
+}
+
+/* Custom Album Card Styling */
+.custom-album-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 800px; /* Match the width of AlbumCard */
+  padding: 20px;
+  margin: 20px 0;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative; /* Ensure correct positioning of elements */
+  /*animation: fadeIn 2s forwards;*/
+  /* animation-delay: var(--delay, 0s); */
+}
+
+.custom-album-card .scores-section {
+  display: flex;
+  justify-content: space-between; /* Spread columns to left and right */
+  width: 90%;
+  margin-top: 3px; /* Add margin to move columns down */
+  margin-bottom: 0px; /* Margin to space it from the overall score */
+  margin-right: 60px;
+}
+
+.custom-album-card .column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%; /* Decrease width to fit within the card */
+  margin-top: 200px;
+}
+
+.custom-album-card .column .scorebar-container {
+  margin-bottom: 40px; /* Increase margin to separate score bars */
+}
+
+.custom-album-card .overall-score {
+  font-size: 2.5rem; /* Increase font size for better visibility */
+  font-weight: bold;
+  margin: 10px 0; /* Margin to space it from the columns */
+  width: 100%; /* Ensure the overall score takes full width */
+  text-align: center; /* Center the text */
+  margin-left: 60px;
+}
+
+.edit-scores-button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 20px;
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  font-family: "Quicksand", sans-serif;
+  display: block; /* Ensure the button is treated as a block-level element */
+  margin: 20px auto; /* Center horizontally */
+}
+
+/**/
+.save-button{
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 20px;
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  font-family: "Quicksand", sans-serif;
+  display: block; /* Ensure the button is treated as a block-level element */
+  margin: 20px auto; /* Center horizontally */
+  margin-bottom: 0px;
+  margin-top: 0px;
 }
 
 
+.custom-album-card .scorebar-input {
+  border-radius: 20px;
+  width: 50px;
+  text-align: center;
+  font-family: "Quicksand", sans-serif;
+  margin-left: 20px
+}
+
+.custom-album-card .scorebar-slider {
+  border-radius: 20px;
+  width: 100px;
+  text-align: center;
+  font-family: "Quicksand", sans-serif;
+  margin-left: 20px;
+}
+
+.scorebar-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 10px;
+  border-radius: 5px;
+  background: #e0e0e0;
+  outline: none;
+  margin-bottom: 5px; /* Add margin to separate slider from value */
+}
+
+.scorebar-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--bar-color, #4CAF50); /* Use the CSS variable */
+  cursor: pointer;
+}
+
+.scorebar-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--bar-color, #4CAF50); /* Use the CSS variable */
+  cursor: pointer;
+}
