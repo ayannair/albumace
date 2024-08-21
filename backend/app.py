@@ -5,7 +5,7 @@ import yt_dlp
 import whisper
 import json
 from analysis import analyze_text_file
-from lyrics import fetch_album_tracks_and_lyrics, get_song_topic, GENAI_API_KEY
+from lyrics import fetch_album_tracks_and_lyrics, get_song_topic, GENAI_API_KEYS
 from db import get_db
 from bson import ObjectId
 
@@ -16,7 +16,7 @@ YOUTUBE_API_KEY = 'xx'
 FFMPEG_PATH = '/opt/homebrew/bin/ffmpeg'
 
 db = get_db()
-collection = db['albums']
+collection = db.get_collection('albums')
 
 # deletes genius translations
 def cleanup_translations():
@@ -157,9 +157,16 @@ def get_topic():
         song_entry = next((item for key, item in lyrics_dict.get('lyrics', {}).items() if item['title'] == song_title), None)
 
         if song_entry:
-            lyrics = song_entry['lyrics']
-            topic = get_song_topic(lyrics, GENAI_API_KEY)
-            return jsonify({'topic': topic})
+            if(song_entry['topics'] != 'empty'):
+                print("found in db: ", song_entry['topics'])
+                return jsonify({'topic': song_entry['topics']})   
+            else:
+                lyrics = song_entry['lyrics']
+                topic = get_song_topic(lyrics, GENAI_API_KEYS)
+                if(song_entry['topics'] == 'empty'):
+                    song_entry['topics'] = topic
+                    print("added to db: ", song_entry['topics'])
+                return jsonify({'topic': topic})
         else:
             return jsonify({'error': 'Song title not found'})
     except Exception as e:
@@ -196,48 +203,47 @@ def update_scores_in_database(entry_id, current_scores, input_scores, total_inpu
 
 @app.route('/save_scores', methods=['POST'])
 def save_scores():
+    score_to_card = {
+        'lyrics_score': 'lyrics_scores',
+        'production_score': 'production_scores',
+        'features_score': 'features_scores',
+        'vocals_score': 'vocals_scores',
+        'originality_score': 'originality_scores',
+        'concept_score': 'concept_scores',
+        'overall_score': 'overall_scores'
+    }
     try:
         data = request.json
         title = data['title']
         input_scores = data['scores']
-
-        # gets album name
-        def extract_title_before_by(title):
-            return title.split(' by ')[0].strip().lower()
-
-        query_album_name = extract_title_before_by(title)
-
-        last_entry = collection.find().sort('_id', -1).limit(1).next()
-        last_entry_album_name = extract_title_before_by(last_entry['title'])
-
-        # check if last entry is the query (applies to searches not in db and were just added)
-        if last_entry_album_name == query_album_name:
+        entry = collection.find_one({'title': {'$regex': title, '$options': 'i'}})
+        if entry:
             updated_scores, updated_total_inputs = update_scores_in_database(
-                last_entry['_id'],
-                last_entry.get('score', {}),
+                entry['_id'],
+                entry.get('score', {}),
                 input_scores,
-                last_entry.get('total_inputs', 1)
+                entry.get('total_inputs', 1)
             )
 
-            print(f"Updated scores for {title} (matches last entry): {input_scores}")
-            return jsonify({'message': 'Scores updated successfully (matches last entry)', 'updated_scores': updated_scores})
+            # adds your card to a sorted array
+            # working on providing percentile information on a user's submitted card
+            cards_updates = {}
+            
+            for score_field, card_field in score_to_card.items():
+                if score_field in input_scores:
+                    existing_scores = entry.get('cards', {}).get(card_field, [])
+                    existing_scores.append(input_scores[score_field])
+                    existing_scores.sort()
+                    cards_updates[f'cards.{card_field}'] = existing_scores
+            
+            if cards_updates:
+                collection.update_one({'_id': entry['_id']}, {'$set': {'score': updated_scores, 'total_inputs': updated_total_inputs, **cards_updates}})
 
+            print(f"Updated scores for {title} (found in database): {input_scores}")
+            return jsonify({'message': 'Scores updated successfully (found in database)', 'updated_scores': updated_scores})
         else:
-            # find in db
-            entry = collection.find_one({'title': {'$regex': title, '$options': 'i'}})
-            if entry:
-                updated_scores, updated_total_inputs = update_scores_in_database(
-                    entry['_id'],
-                    entry.get('score', {}),
-                    input_scores,
-                    entry.get('total_inputs', 1)
-                )
-
-                print(f"Updated scores for {title} (found in database): {input_scores}")
-                return jsonify({'message': 'Scores updated successfully (found in database)', 'updated_scores': updated_scores})
-            else:
-                print(f"Error: No matching entry found for {title}")
-                return jsonify({'error': 'No matching entry found for the provided title'}), 404
+            print(f"Error: No matching entry found for {title}")
+            return jsonify({'error': 'No matching entry found for the provided title'}), 404
 
     except Exception as e:
         print(f"Error: {e}")
@@ -245,4 +251,4 @@ def save_scores():
 
     
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=8000,debug=True)
