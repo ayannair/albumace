@@ -1,15 +1,16 @@
-# Fantanosize
+# AlbumAce
 
-Fantanosize is an innovative project designed to analyze album reviews by Anthony Fantano, providing deeper insights into the music review process. This project employs advanced natural language processing (NLP) techniques, including BERT sentiment analysis models and Google Gemini 1.5 Flash, to deliver detailed sentiment scores for various aspects of an album.
+AlbumAce is an innovative social media platform for music lovers to share and explore album reviews. Designed with a focus on collaborative music critique, AlbumAce enables users to engage with reviews by Anthony Fantano and others, fostering a vibrant community centered around music discussion. The platform combines natural language processing (NLP) techniques with an intuitive user interface to bring album reviews to life.
 
 ## Features
 
-- **Comprehensive Sentiment Analysis**: Breaks down reviews into specific categories such as lyrics, production, features, originality, concept, and vocals, providing sentiment scores for each.
-- **Dynamic Data Retrieval**: Utilizes the YouTube Data API to fetch review videos from theneedledrop channel.
-- **Text Processing**: Employs Whisper for transcribing video audio to text.
-- **Topic Modeling**: Analyzes song lyrics using Genius and Gemini API to extract and model topics discussed in the album.
-- **User Interface**: A React-based frontend that displays sentiment scores, topics, and album cover art in an organized and visually appealing manner.
-- **Backend Support**: Flask backend to handle data retrieval, processing, and storage using MongoDB.
+- **User-Generated Reviews**: Share your thoughts on albums and rate them across categories like lyrics, production, originality, and more.
+- **Comprehensive Sentiment Analysis**: Provides sentiment scores for album reviews across multiple dimensions, utilizing advanced NLP models like BERT and Google Gemini 1.5 Flash.
+- **Dynamic Data Retrieval**: Fetches video reviews from YouTube and text reviews from various sources, including Anthony Fantano's TheNeedleDrop channel.
+- **Topic Modeling**: Analyzes song lyrics using the Genius API to extract and model topics discussed in the album, adding depth to user reviews.
+- **Engaging Social Platform**: Follow other users, comment on reviews, and build playlists based on shared album recommendations.
+- **User Interface**: React-based frontend for an interactive and visually appealing experience. Explore reviews, topics, and album cover art in a clean, organized layout.
+- **Backend Support**: Flask backend for efficient data handling, storage, and processing with MongoDB.
 
 ## Technologies Used
 
@@ -24,8 +25,8 @@ Fantanosize is an innovative project designed to analyze album reviews by Anthon
 
 1. **Clone the Repository**
     ```bash
-    git clone https://github.com/yourusername/fantanosize.git
-    cd fantanosize
+    git clone https://github.com/yourusername/albumace.git
+    cd albumace
     ```
 
 2. **Backend Setup**
@@ -55,18 +56,23 @@ Fantanosize is an innovative project designed to analyze album reviews by Anthon
       ```env
       YOUTUBE_API_KEY=your_youtube_api_key
       GENIUS_API_KEY=your_genius_api_key
-      GEMINI_API_KEYS = [
-          your_gemini_api_keys
-      ]
+      GEMINI_API_KEYS=your_gemini_api_key
       ```
 
 ## Usage
 
 1. Open the React app in your browser.
-2. Search for an album review by entering the album name in the search bar.
-3. View the sentiment scores for different aspects of the album.
-4. Explore detailed topics discussed in the lyrics by clicking on individual songs.
+2. Sign up to create your profile and follow other users.
+3. Search for an album review or write your own.
+4. Rate the album across categories like lyrics, production, and originality.
+5. Explore topics discussed in the lyrics using the Genius integration.
+6. Engage with the community by commenting on reviews and sharing your thoughts on music.
 
+## Contribute
 
+We welcome contributions from the community! If you'd like to contribute to AlbumAce, please follow these steps:
 
-Go deeper than a light to decent 7
+1. Fork the repository.
+2. Create a new branch for your feature or bugfix.
+3. Commit your changes and push them to your fork.
+4. Submit a pull request with a detailed description of your changes.
