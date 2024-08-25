@@ -1,27 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import { PulseLoader } from 'react-spinners';
 import '../styles.css';
 
 const LoadingIcon = ({ loading }) => {
   const [textIndex, setTextIndex] = useState(0);
   const loadingTexts = [
-    "Will he love it?",
-    "Will he hate it?",
-    "What will he rate it?"
+    "Fetching album data...",
+    "Scoring album...",
+    "Displaying songs..."
   ];
 
   useEffect(() => {
     if (loading) {
       const interval = setInterval(() => {
-        setTextIndex(prevIndex => (prevIndex + 1) % 3);
-      }, 4500); // Change text every 1.5 seconds
+        setTextIndex(prevIndex => (prevIndex + 1) % loadingTexts.length);
+      }, 1500); // Change text every 1.5 seconds
 
       return () => clearInterval(interval); // Clean up interval on component unmount
     }
-  }, [loading]); // Removed loadingTexts.length from dependency array
+  }, [loading, loadingTexts.length]);
 
   return (
     <div className="loading-icon">
-      <img src={`${process.env.PUBLIC_URL}/fantano.jpeg`} alt="Loading..." className="rotating-image" />
+      <PulseLoader color="#36D7B7" loading={loading} />
       {loading && (
         <div className="loading-text">
           {loadingTexts[textIndex]}
