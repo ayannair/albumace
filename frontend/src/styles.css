@@ -8,13 +8,14 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f1ed7f;
+  background-color: #90AEAD;
   font-family: "Quicksand", sans-serif;
 }
 
 .header {
   display: flex;
   flex-direction: column;
+  color: #244855;
   align-items: center;
 }
 
@@ -38,7 +39,7 @@ h1 {
   border: none;
   outline: none;
   padding: 8px;
-  width: 200px;
+  width: 250px;
   font-size: 16px;
   font-family: "Quicksand", sans-serif;
 }
@@ -49,8 +50,8 @@ h1 {
   cursor: pointer;
   border-radius: 20px;
   padding: 8px 16px;
-  background-color: #4CAF50;
-  color: white;
+  background-color: #fbe9d0;
+  color: #244855;
   font-family: "Quicksand", sans-serif;
 }
 
@@ -244,6 +245,7 @@ h1 {
   font-size: 1.8rem;
   margin-bottom: 20px;
   text-align: center;
+  color: #244855;
 }
 
 .lyrics-table table {
@@ -302,6 +304,7 @@ h1 {
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
+  opacity: 0;
 }
 
 .topics-section h2 {
@@ -346,8 +349,8 @@ h1 {
   cursor: pointer;
   border-radius: 20px;
   padding: 8px 16px;
-  background-color: #4CAF50;
-  color: white;
+  background-color: #fbe9d0;
+  color: #244855;
   font-size: 16px;
   font-family: "Quicksand", sans-serif;
   margin-left: 150px; /* Add this line to push the button to the right */
@@ -433,8 +436,8 @@ h1 {
   cursor: pointer;
   border-radius: 20px;
   padding: 8px 16px;
-  background-color: #4CAF50;
-  color: white;
+  background-color: #fbe9d0;
+  color: #244855;
   font-size: 16px;
   font-family: "Quicksand", sans-serif;
   display: block; /* Ensure the button is treated as a block-level element */
@@ -448,8 +451,8 @@ h1 {
   cursor: pointer;
   border-radius: 20px;
   padding: 8px 16px;
-  background-color: #4CAF50;
-  color: white;
+  background-color: #fbe9d0;
+  color: #244855;
   font-size: 16px;
   font-family: "Quicksand", sans-serif;
   display: block; /* Ensure the button is treated as a block-level element */
@@ -501,4 +504,42 @@ h1 {
   border-radius: 50%;
   background: var(--bar-color, #4CAF50); /* Use the CSS variable */
   cursor: pointer;
+}
+
+.percentile-card {
+  background-color: #f8f8f8;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  margin-bottom: 20px;
+  animation: fadeIn 2s forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+.percentile-card h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.score-columns {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.score-col {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 0 10px;
+}
+
+.score-overall {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-top: 15px;
 }
