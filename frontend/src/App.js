@@ -29,7 +29,7 @@ const App = () => {
   
     if (value.length > 1) {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/autocomplete', {
+        const response = await axios.get('https://albumace-93f2286af143.herokuapp.com/autocomplete', {
           params: { query: value }
         });
         setSuggestions(response.data);
@@ -54,7 +54,7 @@ const App = () => {
     setShowPercentileCard(false); // Reset the visibility of the PercentileCard on new search
   
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/search?query=${query}`);
+      const response = await axios.get(`https://albumace-93f2286af143.herokuapp.com/search?query=${query}`);
       console.log(response.data);
   
       const { concept_score, features_score, lyrics_score, originality_score, overall_score, production_score, vocals_score } = response.data['score'];
@@ -75,7 +75,7 @@ const App = () => {
     setShowTopics(false);
 
     try {
-      const response = await axios.get('http://127.0.0.1:8000/get_topic', {
+      const response = await axios.get('https://albumace-93f2286af143.herokuapp.com/get_topic', {
         params: { song_title: songTitle },
       });
       setTopics(prevTopics => ({ ...prevTopics, [songTitle]: response.data.topic }));
@@ -92,7 +92,7 @@ const App = () => {
 
   const handleSaveScores = async (newScores) => {
     try {
-      const response = await axios.post('http://127.0.0.1:8000/save_scores', {
+      const response = await axios.post('https://albumace-93f2286af143.herokuapp.com/save_scores', {
         title: query,
         scores: newScores,
         operation_type: operationType, // Pass the operation type
