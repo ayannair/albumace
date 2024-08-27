@@ -208,31 +208,46 @@ const App = () => {
         </div>
       </div>
       <div className="custom-album-card-container">
-      {scores && !loading && !customCardCreated && (
-        <button onClick={handleCreateCardClick} className="edit-scores-button">
-          Make Your Own Card!
-        </button>
+  {scores && !loading && !customCardCreated && (
+    <button onClick={handleCreateCardClick} className="edit-scores-button">
+      Make Your Own Card!
+    </button>
+  )}
+
+  {!loading && showCustomCard && (
+    <CustomAlbumCard
+      initialScores={customScores || scores}
+      onSave={handleSaveScores}
+    />
+  )}
+
+  {customScores && !editMode && customCardCreated && (
+    <button onClick={handleEditCardClick} className="edit-scores-button">
+      Edit Card
+    </button>
+  )}
+
+  {editMode && (
+    <CustomAlbumCard
+      initialScores={customScores}
+      onSave={handleSaveScores}
+    />
+  )}
+
+  {/* Conditionally render the custom card and percentile card side by side */}
+  {customScores && !editMode && (
+    <div className="custom-and-percentile-container">
+      <div className="custom-album-card-container">
+        <AlbumCard scores={customScores} />
+      </div>
+      {showPercentileCard && percentiles && (
+        <div className="percentile-card-container">
+          <PercentileCard percentiles={percentiles} />
+        </div>
       )}
-      {!loading && showCustomCard && (
-        <CustomAlbumCard
-          initialScores={customScores || scores}
-          onSave={handleSaveScores}
-        />
-      )}
-      {customScores && !editMode && customCardCreated && (
-        <button onClick={handleEditCardClick} className="edit-scores-button">
-          Edit Card
-        </button>
-      )}
-      {editMode && (
-        <CustomAlbumCard
-          initialScores={customScores}
-          onSave={handleSaveScores}
-        />
-      )}
-      {customScores && !editMode && <AlbumCard scores={customScores} />}
-      {showPercentileCard && percentiles && <PercentileCard percentiles={percentiles} />} {/* Render PercentileCard conditionally */}
     </div>
+  )}
+</div>
   </div>
 );
 };

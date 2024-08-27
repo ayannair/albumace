@@ -1,5 +1,5 @@
 /* Link to fonts */
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 
 /* General container styling */
 .container {
@@ -8,14 +8,14 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #90AEAD;
-  font-family: "Quicksand", sans-serif;
+  background-color: #d3d3d3;
+  font-family: "Raleway", sans-serif;
 }
 
 .header {
   display: flex;
   flex-direction: column;
-  color: #244855;
+  color: #000000;
   align-items: center;
 }
 
@@ -41,7 +41,7 @@ h1 {
   padding: 8px;
   width: 250px;
   font-size: 16px;
-  font-family: "Quicksand", sans-serif;
+  font-family: "Raleway", sans-serif;
 }
 
 .search-bar button {
@@ -50,9 +50,9 @@ h1 {
   cursor: pointer;
   border-radius: 20px;
   padding: 8px 16px;
-  background-color: #fbe9d0;
-  color: #244855;
-  font-family: "Quicksand", sans-serif;
+  background-color: #be0506;
+  color: #ffffff;
+  font-family: "Raleway", sans-serif;
 }
 
 .loading-icon {
@@ -146,7 +146,7 @@ h1 {
   flex: 0 0 80px; /* Adjust width for label */
   font-weight: bold;
   text-align: left;
-  font-family: 'Quicksand', sans-serif; /* Use Quicksand font */
+  font-family: 'Raleway', sans-serif;
 }
 
 /* Scorebar bar styling */
@@ -171,7 +171,7 @@ h1 {
   padding-right: 8px; /* Adjust padding for text */
   color: white;
   font-weight: bold;
-  font-family: 'Quicksand', sans-serif; /* Use Quicksand font */
+  font-family: 'Raleway', sans-serif;
 }
 
 /* Scorebar text styling */
@@ -179,7 +179,7 @@ h1 {
   font-size: 12px; /* Adjust font size for smaller text */
   padding-left: 8px; /* Adjust padding for text */
   font-weight: bold;
-  font-family: 'Quicksand', sans-serif; /* Use Quicksand font */
+  font-family: 'Raleway', sans-serif;
 }
 
 /* Album card styling */
@@ -245,7 +245,7 @@ h1 {
   font-size: 1.8rem;
   margin-bottom: 20px;
   text-align: center;
-  color: #244855;
+  color: #000000;
 }
 
 .lyrics-table table {
@@ -349,10 +349,10 @@ h1 {
   cursor: pointer;
   border-radius: 20px;
   padding: 8px 16px;
-  background-color: #fbe9d0;
-  color: #244855;
+  background-color: #be0506;
+  color: #ffffff;
   font-size: 16px;
-  font-family: "Quicksand", sans-serif;
+  font-family: "Raleway", sans-serif;
   margin-left: 150px; /* Add this line to push the button to the right */
 }
 
@@ -436,10 +436,10 @@ h1 {
   cursor: pointer;
   border-radius: 20px;
   padding: 8px 16px;
-  background-color: #fbe9d0;
-  color: #244855;
+  background-color: #be0506;
+  color: #ffffff;
   font-size: 16px;
-  font-family: "Quicksand", sans-serif;
+  font-family: "Raleway", sans-serif;
   display: block; /* Ensure the button is treated as a block-level element */
   margin: 20px auto; /* Center horizontally */
 }
@@ -451,10 +451,10 @@ h1 {
   cursor: pointer;
   border-radius: 20px;
   padding: 8px 16px;
-  background-color: #fbe9d0;
-  color: #244855;
+  background-color: #be0506;
+  color: #ffffff;
   font-size: 16px;
-  font-family: "Quicksand", sans-serif;
+  font-family: "Raleway", sans-serif;
   display: block; /* Ensure the button is treated as a block-level element */
   margin: 20px auto; /* Center horizontally */
   margin-bottom: 0px;
@@ -466,7 +466,7 @@ h1 {
   border-radius: 20px;
   width: 50px;
   text-align: center;
-  font-family: "Quicksand", sans-serif;
+  font-family: "Raleway", sans-serif;
   margin-left: 20px
 }
 
@@ -474,7 +474,7 @@ h1 {
   border-radius: 20px;
   width: 100px;
   text-align: center;
-  font-family: "Quicksand", sans-serif;
+  font-family: "Raleway", sans-serif;
   margin-left: 20px;
 }
 
@@ -543,3 +543,22 @@ h1 {
   font-size: 1.2em;
   margin-top: 15px;
 }
+
+.custom-and-percentile-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  align-items: stretch;
+}
+
+.custom-album-card-container {
+  flex: 1;
+  margin: 0 10px;
+}
+
+.percentile-card-container {
+  flex: 1;
+  margin: 0 10px;
+  width: 600px; /* Adjust this percentage as needed */
+}
+
