@@ -5,6 +5,7 @@ import LoadingIcon from './components/LoadingIcon';
 import AlbumCard from './components/AlbumCard';
 import CustomAlbumCard from './components/CustomAlbumCard';
 import PercentileCard from './components/PercentileCard';
+import demoVideo from './demo-video.mp4';
 
 const App = () => {
   const [query, setQuery] = useState('');
@@ -166,6 +167,14 @@ const App = () => {
           </ul>
           )}
         </div>
+      </div>
+      {/* Embed the video below the search bar */}
+      <div className="demo-video">
+      <h2>Watch a demo below!</h2>
+        <video controls width="50%" height="auto">
+          <source src={demoVideo} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       </div>
       {loading && <LoadingIcon loading={loading} />}
       <div className="bento-box">
