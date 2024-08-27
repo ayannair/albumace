@@ -168,14 +168,18 @@ const App = () => {
           )}
         </div>
       </div>
-      {/* Embed the video below the search bar */}
-      <div className="demo-video">
-      <h2>Watch a demo below!</h2>
-        <video controls width="50%" height="auto">
-          <source src={demoVideo} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      </div>
+
+      {/* Conditionally render the video below the search bar */}
+      {!scores && (
+        <div className="demo-video">
+          <h2>Watch a demo below!</h2>
+          <video controls width="50%" height="auto">
+            <source src={demoVideo} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      )}
+
       {loading && <LoadingIcon loading={loading} />}
       <div className="bento-box">
         <div className="left-section">
@@ -236,29 +240,19 @@ const App = () => {
     </button>
   )}
 
-  {editMode && (
-    <CustomAlbumCard
-      initialScores={customScores}
-      onSave={handleSaveScores}
-    />
+  {customScores && !editMode && customCardCreated && (
+    <AlbumCard scores={customScores} />
   )}
+</div>
 
-  {/* Conditionally render the custom card and percentile card side by side */}
-  {customScores && !editMode && (
-    <div className="custom-and-percentile-container">
-      <div className="custom-album-card-container">
-        <AlbumCard scores={customScores} />
-      </div>
-      {showPercentileCard && percentiles && (
+      {/* Render the PercentileCard below the custom album card */}
+      {!loading && showPercentileCard && (
         <div className="percentile-card-container">
-          <PercentileCard percentiles={percentiles} />
+          <PercentileCard scores={percentiles} />
         </div>
       )}
     </div>
-  )}
-</div>
-  </div>
-);
+  );
 };
 
 export default App;
