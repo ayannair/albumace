@@ -23,6 +23,7 @@ const App = () => {
   const [operationType, setOperationType] = useState(''); // Track the operation type ('create' or 'edit')
   const [percentiles, setPercentiles] = useState(null);
   const [showPercentileCard, setShowPercentileCard] = useState(false); // Track when to show the PercentileCard
+  const [searchClicked, setSearchClicked] = useState(false);
 
   const handleInputChange = async (e) => {
     const value = e.target.value;
@@ -43,6 +44,7 @@ const App = () => {
   };
   
   const handleSearch = async () => {
+    setSearchClicked(true);
     setScores(null);
     setLyrics(null);
     setSelectedSong(null);
@@ -168,18 +170,16 @@ const App = () => {
           )}
         </div>
       </div>
-
-      {/* Conditionally render the video below the search bar */}
-      {!scores && (
-        <div className="demo-video">
-          <h2>Watch a demo below!</h2>
-          <video controls width="50%" height="auto">
-            <source src={demoVideo} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
+      {/* Embed the video below the search bar */}
+      {!searchClicked && (
+      <div className="demo-video">
+        <h2>Watch a demo below!</h2>
+        <video controls width="50%" height="auto">
+          <source src={demoVideo} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
       )}
-
       {loading && <LoadingIcon loading={loading} />}
       <div className="bento-box">
         <div className="left-section">
@@ -240,19 +240,29 @@ const App = () => {
     </button>
   )}
 
-  {customScores && !editMode && customCardCreated && (
-    <AlbumCard scores={customScores} />
+  {editMode && (
+    <CustomAlbumCard
+      initialScores={customScores}
+      onSave={handleSaveScores}
+    />
   )}
-</div>
 
-      {/* Render the PercentileCard below the custom album card */}
-      {!loading && showPercentileCard && (
+  {/* Conditionally render the custom card and percentile card side by side */}
+  {customScores && !editMode && (
+    <div className="custom-and-percentile-container">
+      <div className="custom-album-card-container">
+        <AlbumCard scores={customScores} />
+      </div>
+      {showPercentileCard && percentiles && (
         <div className="percentile-card-container">
-          <PercentileCard scores={percentiles} />
+          <PercentileCard percentiles={percentiles} />
         </div>
       )}
     </div>
-  );
+  )}
+</div>
+  </div>
+);
 };
 
 export default App;
