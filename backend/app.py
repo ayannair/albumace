@@ -1,68 +1,19 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import requests
-import yt_dlp
-import whisper
 import json
-from analysis import analyze_text_file
-from lyrics import fetch_album_tracks_and_lyrics, get_song_topic, GENAI_API_KEYS
 from db import get_db
-from bson import ObjectId
+import google.generativeai as genai
+from google.generativeai.types import HarmCategory, HarmBlockThreshold
 
 app = Flask(__name__)
 CORS(app)
 
-YOUTUBE_API_KEY = 'xx'
-FFMPEG_PATH = '/opt/homebrew/bin/ffmpeg'
+GENAI_API_KEY = 'AIzaSyBlH_IUdgUmfxM7ejUeRZpFTExCCvEf8oQ'
 
 db = get_db()
 collection = db.get_collection('albums')
 
-# deletes genius translations
-def cleanup_translations():
-    try:
-        pattern = r'.* by Genius .*'
-        result = collection.delete_many({'title': {'$regex': pattern, '$options': 'i'}})
-        print(f"Deleted {result.deleted_count} entries with translations.")
-    except Exception as e:
-        print(f"Error during cleanup: {str(e)}")
-
-# gets audio from youtube
-def download_audio(url):
-    try:
-        ydl_opts = {
-            'format': 'bestaudio/best',
-            'outtmpl': 'audio.%(ext)s',
-            'postprocessors': [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'wav',
-                'preferredquality': '192',
-            }],
-            'ffmpeg_location': FFMPEG_PATH,
-        }
-
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
-
-        return 'audio.wav'
-    except Exception as e:
-        raise Exception(f'Error downloading audio: {str(e)}')
-
-# uses openai whisper to transcribe audio
-def transcribe_audio(audio_file):
-    try:
-        model = whisper.load_model("tiny")
-        print("Loading model...")
-        result = model.transcribe(audio_file, fp16=False)
-        print("Transcribed audio")
-        transcription_text = result["text"]
-
-        with open('transcript.txt', "w") as f:
-            f.write(transcription_text)
-        
-        return transcription_text
-    except Exception as e:
-        raise Exception(f'Error transcribing audio: {str(e)}')
 
 @app.route('/search')
 def search():
@@ -77,62 +28,43 @@ def search():
             with open('results.json', 'w') as f:
                 json.dump(db_result, f, indent=4)
             return jsonify(db_result)
-
-        # if not in db, get from youtube
-        search_query = f'{query} TheNeedleDrop review'
-
-        params = {
-            'key': YOUTUBE_API_KEY,
-            'part': 'snippet',
-            'type': 'video',
-            'maxResults': 1,
-            'q': search_query
-        }
-        url = 'https://www.googleapis.com/youtube/v3/search'
-        
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        
-        data = response.json()
-
-        video_id = data['items'][0]['id']['videoId']
-        youtube_link = f'https://www.youtube.com/watch?v={video_id}'
-        
-        if youtube_link:
-            audio = download_audio(youtube_link)
-            transcribe_audio(audio)
-            
-            scores = analyze_text_file('transcript.txt')
-
-            lyrics, title = fetch_album_tracks_and_lyrics(query)
-
-            results = {
-                'title': title,
-                'score': scores,
-                'lyrics': lyrics,
-                'total_inputs': 1
-            }
-            
-            # insert/update db
-            collection.update_one(
-                {'title': title},
-                {'$set': results},
-                upsert=True
-            )
-
-            cleanup_translations()
-
-            with open('results.json', 'w') as f:
-                json.dump(results, f, indent=4)
-
-            return jsonify(results)
-            
-        return jsonify({'link': youtube_link})
     
     except requests.exceptions.HTTPError as http_err:
         return jsonify({'error': f'HTTP error occurred: {http_err}'})
     except Exception as e:
         return jsonify({'error': str(e)})
+    
+
+def get_song_topic(lyrics, api_key):
+    try:
+        # Configure the Google Gemini API with the single API key
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        
+        # Prepare the prompt with the provided lyrics
+        prompt = f"In only three words, give the themes discussed in the lyrics: {lyrics}"
+        
+        # Generate content with safety settings
+        response = model.generate_content(
+            prompt,
+            safety_settings={
+                HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE
+            }
+        )
+        
+        # Check and return the response text
+        if response and hasattr(response, 'text'):
+            return response.text
+        else:
+            print(f"API key {api_key} returned an invalid response.")
+            return "Song contains inappropriate lyrics"
+    except Exception as e:
+        print(f"Error with API key {api_key}: {e}")
+        return "An error occurred with the API key"
+
 
 @app.route('/get_topic')
 def get_topic():
@@ -162,7 +94,7 @@ def get_topic():
                 return jsonify({'topic': song_entry['topics']})   
             else:
                 lyrics = song_entry['lyrics']
-                topic = get_song_topic(lyrics, GENAI_API_KEYS)
+                topic = get_song_topic(lyrics, GENAI_API_KEY)
                 if(song_entry['topics'] == 'empty'):
                     song_entry['topics'] = topic
                     print("added to db: ", song_entry['topics'])
@@ -224,23 +156,26 @@ def save_scores():
                 input_scores,
                 entry.get('total_inputs', 1)
             )
-
-            # adds your card to a sorted array
-            # working on providing percentile information on a user's submitted card
+            # Update the `cards` field with the new scores
             cards_updates = {}
+            percentiles = {}
             
             for score_field, card_field in score_to_card.items():
                 if score_field in input_scores:
+                    # Get the existing array or initialize an empty list
                     existing_scores = entry.get('cards', {}).get(card_field, [])
                     existing_scores.append(input_scores[score_field])
                     existing_scores.sort()
                     cards_updates[f'cards.{card_field}'] = existing_scores
+                    position = existing_scores.index(input_scores[score_field])+1
+                    percentile = (position / len(existing_scores)) * 100
+                    percentiles[score_field] = percentile
             
             if cards_updates:
                 collection.update_one({'_id': entry['_id']}, {'$set': {'score': updated_scores, 'total_inputs': updated_total_inputs, **cards_updates}})
 
             print(f"Updated scores for {title} (found in database): {input_scores}")
-            return jsonify({'message': 'Scores updated successfully (found in database)', 'updated_scores': updated_scores})
+            return jsonify({'message': 'Scores updated successfully (found in database)', 'updated_scores': updated_scores, 'percentiles': percentiles})
         else:
             print(f"Error: No matching entry found for {title}")
             return jsonify({'error': 'No matching entry found for the provided title'}), 404
@@ -248,6 +183,34 @@ def save_scores():
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({'error': 'An error occurred'}), 500
+    
+@app.route('/top_bottom_albums', methods=['GET'])
+def get_top_bottom_albums():
+    score_type = request.args.get('score_type')
+
+    if not score_type:
+        return jsonify({"error": "Score type is required"}), 400
+
+    try:
+        # Sort albums by the specified score type
+        top_albums = list(collection.find().sort(f"score.{score_type}", -1).limit(5))
+        bottom_albums = list(collection.find().sort(f"score.{score_type}", 1).limit(5))
+
+        top_albums_data = [
+            {"album_name": album["title"], "score": album["score"].get(score_type)} 
+            for album in top_albums
+        ]
+
+        bottom_albums_data = [
+            {"album_name": album["title"], "score": album["score"].get(score_type)} 
+            for album in bottom_albums
+        ]
+
+
+        return jsonify({"top_albums": top_albums_data, "bottom_albums": bottom_albums_data})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
     
 if __name__ == '__main__':
