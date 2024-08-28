@@ -145,6 +145,7 @@ const App = () => {
     <div className="container">
       <div className="header">
         <h1>AlbumAce</h1>
+        <h2>Score your soundtrack</h2>
         <div className="search-bar">
           <input
             type="text"
