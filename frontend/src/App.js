@@ -24,6 +24,9 @@ const App = () => {
   const [percentiles, setPercentiles] = useState(null);
   const [showPercentileCard, setShowPercentileCard] = useState(false); // Track when to show the PercentileCard
   const [searchClicked, setSearchClicked] = useState(false);
+  const [topAlbums, setTopAlbums] = useState([]);
+  const [bottomAlbums, setBottomAlbums] = useState([]);
+  const [showAlbums, setShowAlbums] = useState(false);
 
   const handleInputChange = async (e) => {
     const value = e.target.value;
@@ -44,6 +47,9 @@ const App = () => {
   };
   
   const handleSearch = async () => {
+    setShowAlbums(true);
+    setTopAlbums([]);
+    setBottomAlbums([]);
     setSearchClicked(true);
     setScores(null);
     setLyrics(null);
@@ -73,6 +79,23 @@ const App = () => {
     }
   };
   
+
+  const handleTopBottomAlbums = async (scoreType) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`https://albumace-93f2286af143.herokuapp.com/top_bottom_albums`, {
+        params: { score_type: scoreType }
+      });
+
+      setTopAlbums(response.data.top_albums);
+      setBottomAlbums(response.data.bottom_albums);
+      setShowAlbums(true);
+    } catch (error) {
+      console.error('Error fetching top/bottom albums:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSongClick = async (songTitle) => {
     setShowTopics(false);
@@ -182,6 +205,63 @@ const App = () => {
       </div>
       )}
       {loading && <LoadingIcon loading={loading} />}
+      {!searchClicked && (
+        <div className="score-buttons">
+          <h2>Click here to see the top/bottom 5 albums of the properties!</h2>
+          <button 
+            className="shared-button-style" 
+            onClick={() => handleTopBottomAlbums('lyrics_score')}
+          >
+            Lyrics
+          </button>
+          <button 
+            className="shared-button-style" 
+            onClick={() => handleTopBottomAlbums('production_score')}
+          >
+            Production
+          </button>
+          <button 
+            className="shared-button-style" 
+            onClick={() => handleTopBottomAlbums('features_score')}
+          >
+            Features
+          </button>
+          <button 
+            className="shared-button-style" 
+            onClick={() => handleTopBottomAlbums('originality_score')}
+          >
+            Originality
+          </button>
+          <button 
+            className="shared-button-style" 
+            onClick={() => handleTopBottomAlbums('concept_score')}
+          >
+            Concept
+          </button>
+          <button 
+            className="shared-button-style" 
+            onClick={() => handleTopBottomAlbums('vocals_score')}
+          >
+            Vocals
+          </button>
+        </div>
+      )}
+      {!searchClicked && showAlbums && (
+        <div className="top-bottom-albums-section">
+          <h3>Top 5 Albums</h3>
+          <ul>
+            {topAlbums.map((album, index) => (
+              <li key={index}>{album.album_name} - {album.score}</li>
+            ))}
+          </ul>
+          <h3>Bottom 5 Albums</h3>
+          <ul>
+            {bottomAlbums.map((album, index) => (
+              <li key={index}>{album.album_name} - {album.score}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div className="bento-box">
         <div className="left-section">
           {lyrics && (

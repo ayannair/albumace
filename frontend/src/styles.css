@@ -576,4 +576,42 @@ h2 {
   text-align: center;
 }
 
+.top-bottom-albums-section {
+  margin-top: 20px;
+}
+
+.top-bottom-albums-section h3 {
+  margin-bottom: 10px;
+}
+
+.top-bottom-albums-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.top-bottom-albums-section ul li {
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+
+.shared-button-style {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 20px;
+  padding: 8px 16px;
+  background-color: #be0506;
+  color: #ffffff;
+  font-size: 16px;
+  font-family: "Raleway", sans-serif;
+}
+
+.score-buttons{
+  margin-bottom: 30px;
+}
+
+.top-bottom-albums-section{
+  margin-bottom: 30px;
+}
+
 
