@@ -576,6 +576,11 @@ h2 {
   text-align: center;
 }
 
+.demo-video video {
+  border: 5px solid #000; /* Adjust the thickness and color as needed */
+  border-radius: 15px; /* Optional: for rounded corners */
+}
+
 .top-bottom-albums-section {
   margin-top: 20px;
 }
@@ -614,5 +619,4 @@ h2 {
 .top-bottom-albums-section{
   margin-bottom: 30px;
 }
-
 
