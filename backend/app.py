@@ -20,18 +20,31 @@ def search():
     query = request.args.get('query')
     
     try:
-        # check if query is in db
+        # Check if query is in the DB
         db_result = collection.find_one({'title': {'$regex': query, '$options': 'i'}})
         
         if db_result:
-            db_result['_id'] = str(db_result['_id'])
+            # Convert ObjectId to string if present
+            if '_id' in db_result:
+                db_result['_id'] = str(db_result['_id'])
+
+            # Debugging: Print the result to verify
+            print("DB Result:", db_result)
+
+            # Write to results.json
             with open('results.json', 'w') as f:
                 json.dump(db_result, f, indent=4)
+            
+            # Debugging: Check if the file was written successfully
+            print("Updated results.json")
+
             return jsonify(db_result)
-    
-    except requests.exceptions.HTTPError as http_err:
-        return jsonify({'error': f'HTTP error occurred: {http_err}'})
+        else:
+            return jsonify({'error': 'No results found'})
+
     except Exception as e:
+        # Debugging: Print any exceptions
+        print("Error: ", str(e))
         return jsonify({'error': str(e)})
     
 
@@ -64,7 +77,6 @@ def get_song_topic(lyrics, api_key):
     except Exception as e:
         print(f"Error with API key {api_key}: {e}")
         return "An error occurred with the API key"
-
 
 @app.route('/get_topic')
 def get_topic():
@@ -192,26 +204,49 @@ def get_top_bottom_albums():
         return jsonify({"error": "Score type is required"}), 400
 
     try:
-        # Sort albums by the specified score type
         top_albums = list(collection.find().sort(f"score.{score_type}", -1).limit(5))
         bottom_albums = list(collection.find().sort(f"score.{score_type}", 1).limit(5))
 
         top_albums_data = [
-            {"album_name": album["title"], "score": album["score"].get(score_type)} 
+            {
+                "album_name": album["title"], 
+                "score": round(album["score"].get(score_type), 1) if album["score"].get(score_type) is not None else None
+            } 
             for album in top_albums
         ]
 
         bottom_albums_data = [
-            {"album_name": album["title"], "score": album["score"].get(score_type)} 
+            {
+                "album_name": album["title"], 
+                "score": round(album["score"].get(score_type), 1) if album["score"].get(score_type) is not None else None
+            } 
             for album in bottom_albums
         ]
-
 
         return jsonify({"top_albums": top_albums_data, "bottom_albums": bottom_albums_data})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-    
+@app.route('/top_popular_albums', methods=['GET'])
+def get_top_popular_albums():
+    try:
+        # Retrieve the top 5 albums sorted by total_inputs in descending order
+        popular_albums = list(collection.find().sort("total_inputs", -1).limit(5))
+
+        popular_albums_data = [
+            {
+                "album_name": album["title"], 
+                "total_inputs": album.get("total_inputs", 0)
+            } 
+            for album in popular_albums
+        ]
+
+        return jsonify({"popular_albums": popular_albums_data})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 if __name__ == '__main__':
     app.run(port=8000,debug=True)
