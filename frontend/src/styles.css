@@ -620,3 +620,24 @@ h2 {
   margin-bottom: 30px;
 }
 
+.popular-albums-section {
+  text-align: center; /* Centers the text and list items */
+  margin: 20px; /* Adds margin around the section */
+}
+
+.popular-albums-section h3 {
+  margin-bottom: 20px; /* Adds space below the header */
+}
+
+.popular-albums-section ul {
+  list-style-type: none; /* Removes bullet points from the list */
+  padding: 0; /* Removes default padding */
+  margin: 0; /* Removes default margin */
+}
+
+.popular-albums-section li {
+  margin: 10px 0; /* Adds vertical space between list items */
+  font-size: 18px; /* Adjusts the font size of list items */
+}
+
+

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles.css';
 import axios from 'axios';
 import LoadingIcon from './components/LoadingIcon';
@@ -27,6 +27,28 @@ const App = () => {
   const [topAlbums, setTopAlbums] = useState([]);
   const [bottomAlbums, setBottomAlbums] = useState([]);
   const [showAlbums, setShowAlbums] = useState(false);
+  const [popularAlbums, setPopularAlbums] = useState([]);
+
+  useEffect(() => {
+    const fetchPopularAlbums = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get('https://albumace-93f2286af143.herokuapp.com/top_popular_albums');
+        console.log(response.data.popular_albums)
+        setPopularAlbums(response.data.popular_albums); // Assuming the response contains an array of albums
+      } catch (error) {
+        console.error('Error fetching popular albums:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPopularAlbums();
+  }, []);
+
+  useEffect(() => {
+    console.log("Updated popularAlbums state:", popularAlbums);
+  }, [popularAlbums]);
 
   const handleInputChange = async (e) => {
     const value = e.target.value;
@@ -258,6 +280,16 @@ const App = () => {
           <ul>
             {bottomAlbums.map((album, index) => (
               <li key={index}>{album.album_name} - {album.score}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {!searchClicked && (
+        <div className="popular-albums-section">
+          <h3>Popular Albums</h3>
+          <ul>
+            {popularAlbums.map((album, index) => (
+              <li key={index}>{album.album_name} - {album.total_inputs}</li>
             ))}
           </ul>
         </div>
