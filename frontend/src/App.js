@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './styles.css';
 import axios from 'axios';
 import LoadingIcon from './components/LoadingIcon';
@@ -28,6 +28,8 @@ const App = () => {
   const [bottomAlbums, setBottomAlbums] = useState([]);
   const [showAlbums, setShowAlbums] = useState(false);
   const [popularAlbums, setPopularAlbums] = useState([]);
+  const customAlbumCardRef = useRef(null);
+
 
   useEffect(() => {
     const fetchPopularAlbums = async () => {
@@ -179,6 +181,9 @@ const App = () => {
     setOperationType('create'); // Set operation type to 'create'
     setShowCustomCard(true);
     setEditMode(false);
+    setTimeout(() => {
+      customAlbumCardRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
   };
 
   const handleEditCardClick = () => {
@@ -333,12 +338,12 @@ const App = () => {
           )}
         </div>
       </div>
-      <div className="custom-album-card-container">
-  {scores && !loading && !customCardCreated && (
-    <button onClick={handleCreateCardClick} className="edit-scores-button">
-      Make Your Own Card!
-    </button>
-  )}
+      <div className="custom-album-card-container" ref={customAlbumCardRef} >
+        {scores && !loading && !customCardCreated && (
+          <button onClick={handleCreateCardClick} className="edit-scores-button">
+            Make Your Own Card!
+          </button>
+        )}
 
   {!loading && showCustomCard && (
     <CustomAlbumCard
