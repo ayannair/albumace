@@ -286,10 +286,10 @@ const App = () => {
       )}
       {!searchClicked && (
         <div className="popular-albums-section">
-          <h3>Popular Albums</h3>
+          <h3>Most Carded Albums</h3>
           <ul>
             {popularAlbums.map((album, index) => (
-              <li key={index}>{album.album_name} - {album.total_inputs}</li>
+              <li key={index}>{album.album_name} - {album.total_inputs} cards</li>
             ))}
           </ul>
         </div>
