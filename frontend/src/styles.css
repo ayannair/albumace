@@ -1,7 +1,5 @@
-/* Link to fonts */
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 
-/* General container styling */
 .container {
   display: flex;
   flex-direction: column;
@@ -117,7 +115,6 @@ h2 {
   }
 }
 
-/* Bento box layout */
 .bento-box {
   display: flex;
   justify-content: space-between;
@@ -130,111 +127,103 @@ h2 {
   margin: 0 10px;
 }
 
-/* Scores container styling */
 .scores-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  margin-top: 20px; /* Margin to space it from the loading icon */
+  margin-top: 20px;
 }
 
-/* Scorebar container styling */
 .scorebar-container {
-  width: 250px; /* Adjust width to be narrower */
+  width: 250px;
   display: flex;
   align-items: center;
-  margin-bottom: 8px; /* Reduce margin to make bars smaller */
-  opacity: 0;
+  margin-bottom: 8px;
   animation: fadeIn 2s forwards;
   animation-delay: var(--delay, 0s);
 }
 
-/* Scorebar label styling */
 .scorebar-label {
-  flex: 0 0 80px; /* Adjust width for label */
+  flex: 0 0 80px;
   font-weight: bold;
   text-align: left;
   font-family: 'Raleway', sans-serif;
 }
 
-/* Scorebar bar styling */
 .scorebar-bar {
-  flex: 1; /* Takes up the remaining space */
-  height: 25px; /* Reduce height for smaller bars */
-  background-color: #ddd; /* Background color */
+  flex: 1;
+  height: 25px;
+  background-color: #ddd;
   border-radius: 15px;
   overflow: hidden;
-  position: relative; /* Ensure correct positioning of elements */
+  position: relative;
   display: flex;
-  align-items: center; /* Center content vertically */
+  align-items: center;
 }
 
-/* Scorebar fill styling */
 .scorebar-fill {
   height: 100%;
   transition: width 0.5s ease-in-out;
   display: flex;
   align-items: center;
-  justify-content: flex-end; /* Align text to the right */
-  padding-right: 8px; /* Adjust padding for text */
+  justify-content: flex-end;
+  padding-right: 8px;
   color: white;
   font-weight: bold;
   font-family: 'Raleway', sans-serif;
 }
 
-/* Scorebar text styling */
 .scorebar-text {
-  font-size: 12px; /* Adjust font size for smaller text */
-  padding-left: 8px; /* Adjust padding for text */
+  font-size: 12px;
+  padding-left: 8px;
   font-weight: bold;
   font-family: 'Raleway', sans-serif;
 }
 
-/* Album card styling */
 .album-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 600px; /* Increase width to make card wider */
+  width: 600px;
   padding: 20px;
   margin: 20px 0;
   background-color: #ffffff;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
-  position: relative; /* Ensure correct positioning of elements */
+  position: relative;
   animation: fadeIn 2s forwards;
   animation-delay: var(--delay, 0s);
 }
 
 .album-card .scores-section {
   display: flex;
-  justify-content: space-between; /* Spread columns to left and right */
+  justify-content: space-between;
   width: 100%;
-  margin-top: 3px; /* Add margin to move columns down */
-  margin-bottom: 0px; /* Margin to space it from the overall score */
+  margin-top: 3px;
+  margin-bottom: 0px;
 }
 
 .album-card .column {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 48%; /* Decrease width to fit within the card */
+  width: 48%;
   margin-top: 100px;
 }
 
 .album-card .column .scorebar-container {
-  margin-bottom: 30px; /* Increase margin to separate score bars */
+  margin-bottom: 30px;
 }
 
 .album-card .overall-score {
-  font-size: 2.5rem; /* Increase font size for better visibility */
+  font-size: 2.5rem;
   font-weight: bold;
-  margin: 10px 0; /* Margin to space it from the columns */
-  width: 100%; /* Ensure the overall score takes full width */
-  text-align: center; /* Center the text */
+  margin: 10px 0;
+  width: 100%;
+  text-align: center;
 }
 
 .lyrics-table {
@@ -362,7 +351,7 @@ h2 {
   color: #ffffff;
   font-size: 16px;
   font-family: "Raleway", sans-serif;
-  margin-left: 150px; /* Add this line to push the button to the right */
+  margin-left: 150px;
 }
 
 .autocomplete-suggestions {
@@ -373,8 +362,8 @@ h2 {
   position: absolute;
   background-color: white;
   z-index: 1000;
-  width: calc(100% - 2px); /* Match the width of the search bar */
-  top: 40px; /* Adjust this value to position it directly below the search bar */
+  width: calc(100% - 2px);
+  top: 40px;
 }
 
 .autocomplete-suggestions li {
@@ -388,33 +377,30 @@ h2 {
 }
 
 .search-bar {
-  position: relative; /* Ensure the suggestions are positioned relative to the search bar */
+  position: relative;
 }
 
-/* Custom Album Card Styling */
 .custom-album-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 800px; /* Match the width of AlbumCard */
+  width: 800px;
   padding: 20px;
   margin: 20px 0;
   background-color: #ffffff;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
-  position: relative; /* Ensure correct positioning of elements */
-  /*animation: fadeIn 2s forwards;*/
-  /* animation-delay: var(--delay, 0s); */
+  position: relative;
 }
 
 .custom-album-card .scores-section {
   display: flex;
-  justify-content: space-between; /* Spread columns to left and right */
+  justify-content: space-between;
   width: 90%;
-  margin-top: 3px; /* Add margin to move columns down */
-  margin-bottom: 0px; /* Margin to space it from the overall score */
+  margin-top: 3px;
+  margin-bottom: 0px;
   margin-right: 60px;
 }
 
@@ -422,20 +408,20 @@ h2 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 50%; /* Decrease width to fit within the card */
+  width: 50%;
   margin-top: 200px;
 }
 
 .custom-album-card .column .scorebar-container {
-  margin-bottom: 40px; /* Increase margin to separate score bars */
+  margin-bottom: 40px;
 }
 
 .custom-album-card .overall-score {
-  font-size: 2.5rem; /* Increase font size for better visibility */
+  font-size: 2.5rem;
   font-weight: bold;
-  margin: 10px 0; /* Margin to space it from the columns */
-  width: 100%; /* Ensure the overall score takes full width */
-  text-align: center; /* Center the text */
+  margin: 10px 0;
+  width: 100%;
+  text-align: center;
   margin-left: 60px;
 }
 
@@ -449,8 +435,8 @@ h2 {
   color: #ffffff;
   font-size: 16px;
   font-family: "Raleway", sans-serif;
-  display: block; /* Ensure the button is treated as a block-level element */
-  margin: 20px auto; /* Center horizontally */
+  display: block;
+  margin: 20px auto;
 }
 
 /**/
@@ -464,8 +450,8 @@ h2 {
   color: #ffffff;
   font-size: 16px;
   font-family: "Raleway", sans-serif;
-  display: block; /* Ensure the button is treated as a block-level element */
-  margin: 20px auto; /* Center horizontally */
+  display: block;
+  margin: 20px auto;
   margin-bottom: 0px;
   margin-top: 0px;
 }
@@ -494,7 +480,7 @@ h2 {
   border-radius: 5px;
   background: #e0e0e0;
   outline: none;
-  margin-bottom: 5px; /* Add margin to separate slider from value */
+  margin-bottom: 5px;
 }
 
 .scorebar-slider::-webkit-slider-thumb {
@@ -503,7 +489,7 @@ h2 {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--bar-color, #4CAF50); /* Use the CSS variable */
+  background: var(--bar-color, #4CAF50);
   cursor: pointer;
 }
 
@@ -511,7 +497,7 @@ h2 {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--bar-color, #4CAF50); /* Use the CSS variable */
+  background: var(--bar-color, #4CAF50);
   cursor: pointer;
 }
 
@@ -568,7 +554,7 @@ h2 {
 .percentile-card-container {
   flex: 1;
   margin: 0 10px;
-  width: 600px; /* Adjust this percentage as needed */
+  width: 600px;
 }
 
 .demo-video {
@@ -577,8 +563,8 @@ h2 {
 }
 
 .demo-video video {
-  border: 5px solid #000; /* Adjust the thickness and color as needed */
-  border-radius: 15px; /* Optional: for rounded corners */
+  border: 5px solid #000;
+  border-radius: 15px;
 }
 
 .top-bottom-albums-section {
@@ -621,23 +607,23 @@ h2 {
 }
 
 .popular-albums-section {
-  text-align: center; /* Centers the text and list items */
-  margin: 20px; /* Adds margin around the section */
+  text-align: center;
+  margin: 20px;
 }
 
 .popular-albums-section h3 {
-  margin-bottom: 20px; /* Adds space below the header */
+  margin-bottom: 20px;
 }
 
 .popular-albums-section ul {
-  list-style-type: none; /* Removes bullet points from the list */
-  padding: 0; /* Removes default padding */
-  margin: 0; /* Removes default margin */
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
 .popular-albums-section li {
-  margin: 10px 0; /* Adds vertical space between list items */
-  font-size: 18px; /* Adjusts the font size of list items */
+  margin: 10px 0;
+  font-size: 18px;
 }
 
 

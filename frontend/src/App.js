@@ -19,10 +19,10 @@ const App = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [showCustomCard, setShowCustomCard] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [customCardCreated, setCustomCardCreated] = useState(false); // Track if custom card has been created
-  const [operationType, setOperationType] = useState(''); // Track the operation type ('create' or 'edit')
+  const [customCardCreated, setCustomCardCreated] = useState(false);
+  const [operationType, setOperationType] = useState('');
   const [percentiles, setPercentiles] = useState(null);
-  const [showPercentileCard, setShowPercentileCard] = useState(false); // Track when to show the PercentileCard
+  const [showPercentileCard, setShowPercentileCard] = useState(false);
   const [searchClicked, setSearchClicked] = useState(false);
   const [topAlbums, setTopAlbums] = useState([]);
   const [bottomAlbums, setBottomAlbums] = useState([]);
@@ -37,7 +37,7 @@ const App = () => {
       try {
         const response = await axios.get('https://albumace-93f2286af143.herokuapp.com/top_popular_albums');
         console.log(response.data.popular_albums)
-        setPopularAlbums(response.data.popular_albums); // Assuming the response contains an array of albums
+        setPopularAlbums(response.data.popular_albums);
       } catch (error) {
         console.error('Error fetching popular albums:', error);
       } finally {
@@ -83,8 +83,8 @@ const App = () => {
     setCustomScores(null);
     setShowCustomCard(false);
     setEditMode(false);
-    setCustomCardCreated(false); // Reset custom card creation on new search
-    setShowPercentileCard(false); // Reset the visibility of the PercentileCard on new search
+    setCustomCardCreated(false);
+    setShowPercentileCard(false);
   
     try {
       const response = await axios.get(`https://albumace-93f2286af143.herokuapp.com/search?query=${query}`);
@@ -99,7 +99,7 @@ const App = () => {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
-      setSuggestions([]); // Clear suggestions after search
+      setSuggestions([]);
     }
   };
   
@@ -145,7 +145,7 @@ const App = () => {
       const response = await axios.post('https://albumace-93f2286af143.herokuapp.com/save_scores', {
         title: query,
         scores: newScores,
-        operation_type: operationType, // Pass the operation type
+        operation_type: operationType,
       });
   
       console.log(response.data);
@@ -165,7 +165,7 @@ const App = () => {
           production_score: Math.round(production_score),
           vocals_score: Math.round(vocals_score),
         });
-        setShowPercentileCard(true); // Show the PercentileCard when scores are saved
+        setShowPercentileCard(true);
       }
     } catch (error) {
       console.error('Error saving scores:', error);
@@ -174,11 +174,11 @@ const App = () => {
     setCustomScores(newScores);
     setEditMode(false);
     setShowCustomCard(false);
-    setCustomCardCreated(true); // Mark custom card as created
+    setCustomCardCreated(true);
   };
 
   const handleCreateCardClick = () => {
-    setOperationType('create'); // Set operation type to 'create'
+    setOperationType('create');
     setShowCustomCard(true);
     setEditMode(false);
     setTimeout(() => {
@@ -187,7 +187,7 @@ const App = () => {
   };
 
   const handleEditCardClick = () => {
-    setOperationType('edit'); // Set operation type to 'edit'
+    setOperationType('edit');
     setEditMode(true);
   };
 
@@ -211,7 +211,7 @@ const App = () => {
                 key={index}
                 onClick={() => {
                   setQuery(suggestion);
-                  setSuggestions([]); // Clear suggestions on click
+                  setSuggestions([]);
                 }}
               >
                 {suggestion}
@@ -221,7 +221,6 @@ const App = () => {
           )}
         </div>
       </div>
-      {/* Embed the video below the search bar */}
       {!searchClicked && (
       <div className="demo-video">
         <h2>Watch a demo below!</h2>
@@ -365,7 +364,6 @@ const App = () => {
     />
   )}
 
-  {/* Conditionally render the custom card and percentile card side by side */}
   {customScores && !editMode && (
     <div className="custom-and-percentile-container">
       <div className="custom-album-card-container">
