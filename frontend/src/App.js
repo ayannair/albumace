@@ -30,7 +30,6 @@ const App = () => {
   const [popularAlbums, setPopularAlbums] = useState([]);
   const customAlbumCardRef = useRef(null);
 
-
   useEffect(() => {
     const fetchPopularAlbums = async () => {
       setLoading(true);
@@ -47,10 +46,6 @@ const App = () => {
 
     fetchPopularAlbums();
   }, []);
-
-  useEffect(() => {
-    console.log("Updated popularAlbums state:", popularAlbums);
-  }, [popularAlbums]);
 
   const handleInputChange = async (e) => {
     const value = e.target.value;
@@ -163,7 +158,7 @@ const App = () => {
           originality_score: Math.round(originality_score),
           overall_score: Math.round(overall_score),
           production_score: Math.round(production_score),
-          vocals_score: Math.round(vocals_score),
+          vocals_score: Math.round(vocals_score)
         });
         setShowPercentileCard(true);
       }
@@ -343,40 +338,36 @@ const App = () => {
             Make Your Own Card!
           </button>
         )}
-
-  {!loading && showCustomCard && (
-    <CustomAlbumCard
-      initialScores={customScores || scores}
-      onSave={handleSaveScores}
-    />
-  )}
-
-  {customScores && !editMode && customCardCreated && (
-    <button onClick={handleEditCardClick} className="edit-scores-button">
-      Edit Card
-    </button>
-  )}
-
-  {editMode && (
-    <CustomAlbumCard
-      initialScores={customScores}
-      onSave={handleSaveScores}
-    />
-  )}
-
-  {customScores && !editMode && (
-    <div className="custom-and-percentile-container">
-      <div className="custom-album-card-container">
-        <AlbumCard scores={customScores} />
+        {!loading && showCustomCard && (
+          <CustomAlbumCard
+            initialScores={customScores || scores}
+            onSave={handleSaveScores}
+          />
+        )}
+        {customScores && !editMode && customCardCreated && (
+          <button onClick={handleEditCardClick} className="edit-scores-button">
+            Edit Card
+          </button>
+        )}
+        {editMode && (
+          <CustomAlbumCard
+            initialScores={customScores}
+            onSave={handleSaveScores}
+          />
+        )}
+        {customScores && !editMode && (
+          <div className="custom-and-percentile-container">
+            <div className="custom-album-card-container">
+              <AlbumCard scores={customScores} />
+            </div>
+            {showPercentileCard && percentiles && (
+              <div className="percentile-card-container">
+                <PercentileCard percentiles={percentiles} />
+              </div>
+            )}
+          </div>
+        )}
       </div>
-      {showPercentileCard && percentiles && (
-        <div className="percentile-card-container">
-          <PercentileCard percentiles={percentiles} />
-        </div>
-      )}
-    </div>
-  )}
-</div>
   </div>
 );
 };
